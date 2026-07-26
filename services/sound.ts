@@ -21,13 +21,13 @@ function getPlayer(name: SoundName): AudioPlayer | null {
   }
 }
 
-export function playSound(name: SoundName): void {
+export async function playSound(name: SoundName): Promise<void> {
   try {
     const player = getPlayer(name);
     if (!player) {
       return;
     }
-    player.seekTo(0);
+    await player.seekTo(0);
     player.play();
   } catch {
     // Playback errors must never block gameplay.
