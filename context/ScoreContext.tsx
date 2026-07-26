@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { ReactNode, createContext, useContext, useEffect, useState } from 'react';
+import { ReactNode, createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react';
 
 const BEST_SCORE_KEY = 'colorTest.bestScore';
 const ADS_REMOVED_KEY = 'colorTest.adsRemoved';
@@ -42,15 +42,15 @@ export function ScoreProvider({ children }: { children: ReactNode }) {
     })();
   }, []);
 
-  function addPoints(points: number) {
+  const addPoints = useCallback((points: number) => {
     setScore((current) => current + points);
-  }
+  }, []);
 
-  function resetSession() {
+  const resetSession = useCallback(() => {
     setScore(0);
-  }
+  }, []);
 
-  function endSession() {
+  const endSession = useCallback(() => {
     setBestScore((currentBest) => {
       if (score <= currentBest) {
         return currentBest;
@@ -60,22 +60,21 @@ export function ScoreProvider({ children }: { children: ReactNode }) {
       });
       return score;
     });
-  }
+  }, [score]);
 
-  function setAdsRemoved(value: boolean) {
+  const setAdsRemoved = useCallback((value: boolean) => {
     setAdsRemovedState(value);
     AsyncStorage.setItem(ADS_REMOVED_KEY, String(value)).catch(() => {
       // Flag still updates in memory even if persistence fails.
     });
-  }
+  }, []);
 
-  return (
-    <ScoreContext.Provider
-      value={{ score, bestScore, adsRemoved, addPoints, resetSession, endSession, setAdsRemoved }}
-    >
-      {children}
-    </ScoreContext.Provider>
+  const value = useMemo(
+    () => ({ score, bestScore, adsRemoved, addPoints, resetSession, endSession, setAdsRemoved }),
+    [score, bestScore, adsRemoved, addPoints, resetSession, endSession, setAdsRemoved]
   );
+
+  return <ScoreContext.Provider value={value}>{children}</ScoreContext.Provider>;
 }
 
 export function useScore(): ScoreContextValue {
