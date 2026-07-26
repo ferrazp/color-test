@@ -11,9 +11,8 @@ import { playSound } from '../services/sound';
 
 export default function ResultScreen() {
   const { t } = useLanguage();
-  const { score, bestScore, adsRemoved, setAdsRemoved } = useScore();
+  const { score, bestScore, adsRemoved, wasNewBest, setAdsRemoved } = useScore();
   const [purchasing, setPurchasing] = useState(false);
-  const isNewBest = score > 0 && score === bestScore;
 
   function handlePlayAgain() {
     tapFeedback();
@@ -46,7 +45,7 @@ export default function ResultScreen() {
       <Text style={styles.score}>
         {t('finalScore')}: {score}
       </Text>
-      {isNewBest && <Text style={styles.newBest}>{t('newBest')}</Text>}
+      {wasNewBest && <Text style={styles.newBest}>{t('newBest')}</Text>}
       <AdBanner />
       <Pressable style={styles.primaryButton} onPress={handlePlayAgain}>
         <Text style={styles.primaryButtonText}>{t('playAgain')}</Text>

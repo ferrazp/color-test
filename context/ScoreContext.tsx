@@ -8,6 +8,7 @@ type ScoreContextValue = {
   score: number;
   bestScore: number;
   adsRemoved: boolean;
+  wasNewBest: boolean;
   addPoints: (points: number) => void;
   resetSession: () => void;
   endSession: () => void;
@@ -20,6 +21,7 @@ export function ScoreProvider({ children }: { children: ReactNode }) {
   const [score, setScore] = useState(0);
   const [bestScore, setBestScore] = useState(0);
   const [adsRemoved, setAdsRemovedState] = useState(false);
+  const [wasNewBest, setWasNewBest] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -51,16 +53,16 @@ export function ScoreProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const endSession = useCallback(() => {
-    setBestScore((currentBest) => {
-      if (score <= currentBest) {
-        return currentBest;
-      }
-      AsyncStorage.setItem(BEST_SCORE_KEY, String(score)).catch(() => {
-        // Best score still updates in memory even if persistence fails.
-      });
-      return score;
+    if (score <= bestScore) {
+      setWasNewBest(false);
+      return;
+    }
+    setBestScore(score);
+    setWasNewBest(true);
+    AsyncStorage.setItem(BEST_SCORE_KEY, String(score)).catch(() => {
+      // Best score still updates in memory even if persistence fails.
     });
-  }, [score]);
+  }, [score, bestScore]);
 
   const setAdsRemoved = useCallback((value: boolean) => {
     setAdsRemovedState(value);
@@ -70,8 +72,8 @@ export function ScoreProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ score, bestScore, adsRemoved, addPoints, resetSession, endSession, setAdsRemoved }),
-    [score, bestScore, adsRemoved, addPoints, resetSession, endSession, setAdsRemoved]
+    () => ({ score, bestScore, adsRemoved, wasNewBest, addPoints, resetSession, endSession, setAdsRemoved }),
+    [score, bestScore, adsRemoved, wasNewBest, addPoints, resetSession, endSession, setAdsRemoved]
   );
 
   return <ScoreContext.Provider value={value}>{children}</ScoreContext.Provider>;
