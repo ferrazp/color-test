@@ -1,0 +1,22 @@
+{
+  "ui": {
+    "appName": "Color Test",
+    "bestScore": "Melhor pontuação",
+    "play": "Jogar",
+    "score": "Pontuação",
+    "finalScore": "Pontuação final",
+    "newBest": "Novo recorde!",
+    "playAgain": "Jogar de novo",
+    "menu": "Menu",
+    "removeAds": "Remover anúncios",
+    "purchasing": "Processando..."
+  },
+  "colors": {
+    "red": "Vermelho",
+    "blue": "Azul",
+    "green": "Verde",
+    "yellow": "Amarelo",
+    "purple": "Roxo",
+    "orange": "Laranja"
+  }
+}

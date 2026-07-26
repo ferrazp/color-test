@@ -1,0 +1,22 @@
+{
+  "ui": {
+    "appName": "Color Test",
+    "bestScore": "Bestwert",
+    "play": "Spielen",
+    "score": "Punkte",
+    "finalScore": "Endstand",
+    "newBest": "Neuer Rekord!",
+    "playAgain": "Nochmal spielen",
+    "menu": "Menü",
+    "removeAds": "Werbung entfernen",
+    "purchasing": "Wird verarbeitet..."
+  },
+  "colors": {
+    "red": "Rot",
+    "blue": "Blau",
+    "green": "Grün",
+    "yellow": "Gelb",
+    "purple": "Lila",
+    "orange": "Orange"
+  }
+}
