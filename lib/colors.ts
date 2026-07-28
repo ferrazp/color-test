@@ -6,12 +6,12 @@ export type ColorDef = {
 };
 
 export const COLORS: ColorDef[] = [
-  { id: 'red', hex: '#E53935' },
-  { id: 'blue', hex: '#1E88E5' },
-  { id: 'green', hex: '#43A047' },
-  { id: 'yellow', hex: '#FDD835' },
-  { id: 'purple', hex: '#8E24AA' },
-  { id: 'orange', hex: '#FB8C00' },
+  { id: 'red', hex: '#FF4B5C' },
+  { id: 'blue', hex: '#2F8FFF' },
+  { id: 'green', hex: '#2ED573' },
+  { id: 'yellow', hex: '#FFD23F' },
+  { id: 'purple', hex: '#8C54FF' },
+  { id: 'orange', hex: '#FF8C42' },
 ];
 
 export function hexFor(id: ColorId): string {
