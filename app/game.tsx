@@ -22,9 +22,10 @@ export default function GameScreen() {
   const { score, adsRemoved, addPoints, resetSession, endSession } = useScore();
   const [round, setRound] = useState(() => generateRound());
   const [correctCount, setCorrectCount] = useState(0);
-  const [roundDurationMs, setRoundDurationMs] = useState(() => roundDurationFor(0));
   const [remainingMs, setRemainingMs] = useState(() => roundDurationFor(0));
   const endedRef = useRef(false);
+
+  const roundDurationMs = roundDurationFor(correctCount);
 
   useEffect(() => {
     resetSession();
@@ -59,14 +60,12 @@ export default function GameScreen() {
     }
     if (selected === round.ink) {
       const nextCorrectCount = correctCount + 1;
-      const nextDuration = roundDurationFor(nextCorrectCount);
       addPoints(POINTS_PER_CORRECT);
       successFeedback();
       playSound('correct');
       setCorrectCount(nextCorrectCount);
       setRound(generateRound());
-      setRoundDurationMs(nextDuration);
-      setRemainingMs(nextDuration);
+      setRemainingMs(roundDurationFor(nextCorrectCount));
     } else {
       errorFeedback();
       playSound('wrong');

@@ -1,5 +1,5 @@
 import { router } from 'expo-router';
-import { Pressable, StyleSheet, Text, View } from 'react-native';
+import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useLanguage } from '../context/LanguageContext';
 import { useScore } from '../context/ScoreContext';
@@ -18,26 +18,28 @@ export default function HowToPlayScreen() {
   }
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Text style={styles.title}>{t('instructionsTitle')}</Text>
-      <View style={styles.steps}>
-        {instructionsSteps.map((step, index) => (
-          <Text key={index} style={styles.step}>
-            {index + 1}. {step}
-          </Text>
-        ))}
-      </View>
-      <Pressable style={styles.startButton} onPress={handleStart}>
-        <Text style={styles.startButtonText}>{t('start')}</Text>
-      </Pressable>
+    <SafeAreaView style={styles.safeArea}>
+      <ScrollView contentContainerStyle={styles.container}>
+        <Text style={styles.title}>{t('instructionsTitle')}</Text>
+        <View style={styles.steps}>
+          {instructionsSteps.map((step, index) => (
+            <Text key={index} style={styles.step}>
+              {index + 1}. {step}
+            </Text>
+          ))}
+        </View>
+        <Pressable style={styles.startButton} onPress={handleStart}>
+          <Text style={styles.startButtonText}>{t('start')}</Text>
+        </Pressable>
+      </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
+  safeArea: { flex: 1, backgroundColor: '#111' },
   container: {
-    flex: 1,
-    backgroundColor: '#111',
+    flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 24,
