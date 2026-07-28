@@ -7,13 +7,13 @@ import { ScoreBadge } from '../components/ScoreBadge';
 import { TimerBar } from '../components/TimerBar';
 import { useLanguage } from '../context/LanguageContext';
 import { useScore } from '../context/ScoreContext';
-import { hexFor } from '../lib/colors';
+import { ColorId, hexFor } from '../lib/colors';
 import { generateRound } from '../lib/generateRound';
+import { roundDurationFor } from '../lib/roundDuration';
 import { showInterstitial } from '../services/ads';
 import { errorFeedback, successFeedback } from '../services/haptics';
 import { playSound } from '../services/sound';
 
-const SESSION_MS = 60_000;
 const TICK_MS = 100;
 const POINTS_PER_CORRECT = 10;
 
@@ -21,7 +21,9 @@ export default function GameScreen() {
   const { t, colorName } = useLanguage();
   const { score, adsRemoved, addPoints, resetSession, endSession } = useScore();
   const [round, setRound] = useState(() => generateRound());
-  const [remainingMs, setRemainingMs] = useState(SESSION_MS);
+  const [correctCount, setCorrectCount] = useState(0);
+  const [roundDurationMs, setRoundDurationMs] = useState(() => roundDurationFor(0));
+  const [remainingMs, setRemainingMs] = useState(() => roundDurationFor(0));
   const endedRef = useRef(false);
 
   useEffect(() => {
@@ -51,15 +53,20 @@ export default function GameScreen() {
     }
   }, [remainingMs, finishGame]);
 
-  function handleAnswer(selected: string) {
+  function handleAnswer(selected: ColorId) {
     if (endedRef.current) {
       return;
     }
     if (selected === round.ink) {
+      const nextCorrectCount = correctCount + 1;
+      const nextDuration = roundDurationFor(nextCorrectCount);
       addPoints(POINTS_PER_CORRECT);
       successFeedback();
       playSound('correct');
+      setCorrectCount(nextCorrectCount);
       setRound(generateRound());
+      setRoundDurationMs(nextDuration);
+      setRemainingMs(nextDuration);
     } else {
       errorFeedback();
       playSound('wrong');
@@ -69,7 +76,7 @@ export default function GameScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <TimerBar progress={remainingMs / SESSION_MS} />
+      <TimerBar progress={remainingMs / roundDurationMs} />
       <ScoreBadge label={t('score')} value={score} />
       <View style={styles.wordContainer}>
         <Text style={[styles.word, { color: hexFor(round.ink) }]}>{colorName(round.word)}</Text>
