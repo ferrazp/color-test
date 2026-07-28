@@ -1,0 +1,32 @@
+{
+  "ui": {
+    "appName": "Color Test",
+    "bestScore": "Bestwert",
+    "play": "Spielen",
+    "score": "Punkte",
+    "finalScore": "Endstand",
+    "newBest": "Neuer Rekord!",
+    "playAgain": "Nochmal spielen",
+    "menu": "Menü",
+    "removeAds": "Werbung entfernen",
+    "purchasing": "Wird verarbeitet...",
+    "howToPlay": "Spielanleitung",
+    "instructionsTitle": "Spielanleitung",
+    "start": "Spiel starten"
+  },
+  "colors": {
+    "red": "Rot",
+    "blue": "Blau",
+    "green": "Grün",
+    "yellow": "Gelb",
+    "purple": "Lila",
+    "orange": "Orange"
+  },
+  "instructionsSteps": [
+    "Ein Farbname erscheint, geschrieben in einer anderen Farbe.",
+    "Tippe auf die Schaltfläche, die zur SCHRIFTFARBE passt — nicht zum Wort.",
+    "Jede Runde gibt dir 5 Sekunden. Eine richtige Antwort setzt die Uhr zurück und startet eine neue Runde.",
+    "Nach 10 richtigen Antworten in Folge werden die Runden auf 3 Sekunden beschleunigt.",
+    "Ein Fehler oder Zeitablauf beendet das Spiel."
+  ]
+}

@@ -1,0 +1,32 @@
+{
+  "ui": {
+    "appName": "Color Test",
+    "bestScore": "Best score",
+    "play": "Play",
+    "score": "Score",
+    "finalScore": "Final score",
+    "newBest": "New best!",
+    "playAgain": "Play again",
+    "menu": "Menu",
+    "removeAds": "Remove ads",
+    "purchasing": "Processing...",
+    "howToPlay": "How to play",
+    "instructionsTitle": "How to play",
+    "start": "Start playing"
+  },
+  "colors": {
+    "red": "Red",
+    "blue": "Blue",
+    "green": "Green",
+    "yellow": "Yellow",
+    "purple": "Purple",
+    "orange": "Orange"
+  },
+  "instructionsSteps": [
+    "A color name appears, written in a different ink color.",
+    "Tap the button matching the INK color — not the word.",
+    "Each round gives you 5 seconds. A correct answer resets the clock and starts a new round.",
+    "After 10 correct answers in a row, rounds speed up to 3 seconds.",
+    "One wrong tap or running out of time ends the game."
+  ]
+}
