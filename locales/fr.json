@@ -9,7 +9,10 @@
     "playAgain": "Rejouer",
     "menu": "Menu",
     "removeAds": "Supprimer les pubs",
-    "purchasing": "Traitement..."
+    "purchasing": "Traitement...",
+    "howToPlay": "Comment jouer",
+    "instructionsTitle": "Comment jouer",
+    "start": "Commencer à jouer"
   },
   "colors": {
     "red": "Rouge",
@@ -18,5 +21,12 @@
     "yellow": "Jaune",
     "purple": "Violet",
     "orange": "Orange"
-  }
+  },
+  "instructionsSteps": [
+    "Le nom d'une couleur apparaît, écrit avec une encre d'une autre couleur.",
+    "Appuyez sur le bouton correspondant à la couleur de l'ENCRE, pas au mot.",
+    "Chaque manche vous donne 5 secondes. Une bonne réponse réinitialise le chrono et lance une nouvelle manche.",
+    "Après 10 bonnes réponses d'affilée, les manches passent à 3 secondes.",
+    "Une erreur ou un temps écoulé termine la partie."
+  ]
 }

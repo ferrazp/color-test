@@ -9,7 +9,10 @@
     "playAgain": "Jogar de novo",
     "menu": "Menu",
     "removeAds": "Remover anúncios",
-    "purchasing": "Processando..."
+    "purchasing": "Processando...",
+    "howToPlay": "Como jogar",
+    "instructionsTitle": "Como jogar",
+    "start": "Começar a jogar"
   },
   "colors": {
     "red": "Vermelho",
@@ -18,5 +21,12 @@
     "yellow": "Amarelo",
     "purple": "Roxo",
     "orange": "Laranja"
-  }
+  },
+  "instructionsSteps": [
+    "Aparece o nome de uma cor, escrito com outra tinta.",
+    "Toque no botão que corresponde à cor da TINTA, não à palavra.",
+    "Cada rodada dá 5 segundos. Um acerto reinicia o relógio e começa uma nova rodada.",
+    "Depois de 10 acertos seguidos, as rodadas aceleram para 3 segundos.",
+    "Um erro ou ficar sem tempo termina o jogo."
+  ]
 }

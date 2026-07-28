@@ -24,6 +24,7 @@ type LanguageContextValue = {
   locale: LocaleCode;
   t: (key: UiKey) => string;
   colorName: (id: ColorId) => string;
+  instructionsSteps: string[];
 };
 
 const LanguageContext = createContext<LanguageContextValue | null>(null);
@@ -36,6 +37,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
       locale,
       t: (key) => dictionary.ui[key],
       colorName: (id) => dictionary.colors[id],
+      instructionsSteps: dictionary.instructionsSteps,
     };
   }, []);
 
