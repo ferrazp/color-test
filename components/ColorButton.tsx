@@ -1,22 +1,48 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { useEffect } from 'react';
+import { Pressable, StyleSheet } from 'react-native';
+import Animated, { useAnimatedStyle, useSharedValue, withDelay, withSpring } from 'react-native-reanimated';
 import { ColorId, hexFor } from '../lib/colors';
+import { THEME } from '../lib/theme';
 
 type Props = {
   colorId: ColorId;
   label: string;
   onPress: () => void;
+  entranceKey?: number;
+  entranceDelay?: number;
 };
 
-export function ColorButton({ colorId, label, onPress }: Props) {
+const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
+
+export function ColorButton({ colorId, label, onPress, entranceKey = 0, entranceDelay = 0 }: Props) {
+  const scale = useSharedValue(0);
+
+  useEffect(() => {
+    scale.value = 0;
+    scale.value = withDelay(entranceDelay, withSpring(1, { damping: 10, stiffness: 180 }));
+  }, [entranceKey, entranceDelay, scale]);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  function handlePressIn() {
+    scale.value = withSpring(0.9, { damping: 12, stiffness: 300 });
+  }
+
+  function handlePressOut() {
+    scale.value = withSpring(1, { damping: 10, stiffness: 200 });
+  }
+
   return (
-    <Pressable
+    <AnimatedPressable
       onPress={onPress}
-      style={[styles.button, { backgroundColor: hexFor(colorId) }]}
+      onPressIn={handlePressIn}
+      onPressOut={handlePressOut}
+      style={[styles.button, { backgroundColor: hexFor(colorId) }, animatedStyle]}
       accessibilityRole="button"
       accessibilityLabel={label}
-    >
-      <Text style={styles.label}>{label}</Text>
-    </Pressable>
+    />
   );
 }
 
@@ -24,14 +50,14 @@ const styles = StyleSheet.create({
   button: {
     width: '47%',
     aspectRatio: 2,
-    borderRadius: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
+    borderRadius: 20,
     marginBottom: 12,
-  },
-  label: {
-    color: '#fff',
-    fontSize: 16,
-    fontWeight: '700',
+    borderWidth: 3,
+    borderColor: THEME.border,
+    shadowColor: THEME.border,
+    shadowOffset: { width: 4, height: 4 },
+    shadowOpacity: 1,
+    shadowRadius: 0,
+    elevation: 4,
   },
 });
