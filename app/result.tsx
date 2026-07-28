@@ -1,34 +1,29 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AdBanner } from '../components/AdBanner';
+import { BouncyButton } from '../components/BouncyButton';
 import { useLanguage } from '../context/LanguageContext';
 import { useScore } from '../context/ScoreContext';
+import { hexFor } from '../lib/colors';
+import { THEME } from '../lib/theme';
 import { purchaseRemoveAds } from '../services/iap';
-import { tapFeedback } from '../services/haptics';
-import { playSound } from '../services/sound';
 
 export default function ResultScreen() {
   const { t } = useLanguage();
-  const { score, bestScore, adsRemoved, wasNewBest, setAdsRemoved } = useScore();
+  const { score, adsRemoved, wasNewBest, setAdsRemoved } = useScore();
   const [purchasing, setPurchasing] = useState(false);
 
   function handlePlayAgain() {
-    tapFeedback();
-    playSound('tap');
     router.replace('/game');
   }
 
   function handleMenu() {
-    tapFeedback();
-    playSound('tap');
     router.replace('/');
   }
 
   async function handleRemoveAds() {
-    tapFeedback();
-    playSound('tap');
     setPurchasing(true);
     try {
       const success = await purchaseRemoveAds();
@@ -47,16 +42,15 @@ export default function ResultScreen() {
       </Text>
       {wasNewBest && <Text style={styles.newBest}>{t('newBest')}</Text>}
       <AdBanner />
-      <Pressable style={styles.primaryButton} onPress={handlePlayAgain}>
-        <Text style={styles.primaryButtonText}>{t('playAgain')}</Text>
-      </Pressable>
-      <Pressable style={styles.secondaryButton} onPress={handleMenu}>
-        <Text style={styles.secondaryButtonText}>{t('menu')}</Text>
-      </Pressable>
+      <BouncyButton label={t('playAgain')} onPress={handlePlayAgain} variant="primary" />
+      <BouncyButton label={t('menu')} onPress={handleMenu} variant="secondary" />
       {!adsRemoved && (
-        <Pressable style={styles.linkButton} onPress={handleRemoveAds} disabled={purchasing}>
-          <Text style={styles.linkButtonText}>{purchasing ? t('purchasing') : t('removeAds')}</Text>
-        </Pressable>
+        <BouncyButton
+          label={purchasing ? t('purchasing') : t('removeAds')}
+          onPress={handleRemoveAds}
+          variant="link"
+          disabled={purchasing}
+        />
       )}
     </SafeAreaView>
   );
@@ -65,23 +59,12 @@ export default function ResultScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#111',
+    backgroundColor: THEME.background,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 16,
     padding: 24,
   },
-  score: { fontSize: 28, fontWeight: '800', color: '#fff' },
-  newBest: { fontSize: 16, color: '#FDD835', fontWeight: '700' },
-  primaryButton: {
-    backgroundColor: '#43A047',
-    paddingVertical: 14,
-    paddingHorizontal: 40,
-    borderRadius: 999,
-  },
-  primaryButtonText: { fontSize: 18, fontWeight: '700', color: '#fff' },
-  secondaryButton: { paddingVertical: 10 },
-  secondaryButtonText: { fontSize: 16, color: '#ccc' },
-  linkButton: { paddingVertical: 8 },
-  linkButtonText: { fontSize: 14, color: '#888' },
+  score: { fontSize: 30, fontWeight: '900', color: THEME.text },
+  newBest: { fontSize: 16, color: hexFor('orange'), fontWeight: '800' },
 });

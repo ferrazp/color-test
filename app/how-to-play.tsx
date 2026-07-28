@@ -1,18 +1,16 @@
 import { router } from 'expo-router';
-import { Pressable, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { BouncyButton } from '../components/BouncyButton';
 import { useLanguage } from '../context/LanguageContext';
 import { useScore } from '../context/ScoreContext';
-import { tapFeedback } from '../services/haptics';
-import { playSound } from '../services/sound';
+import { THEME } from '../lib/theme';
 
 export default function HowToPlayScreen() {
   const { t, instructionsSteps } = useLanguage();
   const { setHasSeenInstructions } = useScore();
 
   function handleStart() {
-    tapFeedback();
-    playSound('tap');
     setHasSeenInstructions(true);
     router.replace('/game');
   }
@@ -23,36 +21,50 @@ export default function HowToPlayScreen() {
         <Text style={styles.title}>{t('instructionsTitle')}</Text>
         <View style={styles.steps}>
           {instructionsSteps.map((step, index) => (
-            <Text key={index} style={styles.step}>
-              {index + 1}. {step}
-            </Text>
+            <View key={index} style={styles.stepRow}>
+              <View style={styles.stepNumber}>
+                <Text style={styles.stepNumberText}>{index + 1}</Text>
+              </View>
+              <Text style={styles.stepText}>{step}</Text>
+            </View>
           ))}
         </View>
-        <Pressable style={styles.startButton} onPress={handleStart}>
-          <Text style={styles.startButtonText}>{t('start')}</Text>
-        </Pressable>
+        <BouncyButton label={t('start')} onPress={handleStart} variant="primary" />
       </ScrollView>
     </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: { flex: 1, backgroundColor: '#111' },
+  safeArea: { flex: 1, backgroundColor: THEME.background },
   container: {
     flexGrow: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    gap: 24,
+    gap: 28,
     padding: 24,
   },
-  title: { fontSize: 28, fontWeight: '800', color: '#fff' },
-  steps: { gap: 12, alignSelf: 'stretch' },
-  step: { fontSize: 16, color: '#ccc', lineHeight: 22 },
-  startButton: {
-    backgroundColor: '#43A047',
-    paddingVertical: 16,
-    paddingHorizontal: 48,
-    borderRadius: 999,
+  title: { fontSize: 32, fontWeight: '900', color: THEME.text, letterSpacing: 0.5 },
+  steps: { gap: 14, alignSelf: 'stretch' },
+  stepRow: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    gap: 12,
+    backgroundColor: '#fff',
+    borderRadius: 16,
+    borderWidth: 2,
+    borderColor: THEME.border,
+    padding: 12,
   },
-  startButtonText: { fontSize: 20, fontWeight: '700', color: '#fff' },
+  stepNumber: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: THEME.text,
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexShrink: 0,
+  },
+  stepNumberText: { color: THEME.background, fontSize: 14, fontWeight: '900' },
+  stepText: { flex: 1, fontSize: 15, lineHeight: 21, color: THEME.text, fontWeight: '600' },
 });

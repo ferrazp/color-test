@@ -1,24 +1,20 @@
 import { router } from 'expo-router';
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { StyleSheet, Text } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { BouncyButton } from '../components/BouncyButton';
 import { useLanguage } from '../context/LanguageContext';
 import { useScore } from '../context/ScoreContext';
-import { tapFeedback } from '../services/haptics';
-import { playSound } from '../services/sound';
+import { THEME } from '../lib/theme';
 
 export default function MenuScreen() {
   const { t } = useLanguage();
   const { bestScore, hasSeenInstructions } = useScore();
 
   function handlePlay() {
-    tapFeedback();
-    playSound('tap');
     router.push(hasSeenInstructions ? '/game' : '/how-to-play');
   }
 
   function handleHowToPlay() {
-    tapFeedback();
-    playSound('tap');
     router.push('/how-to-play');
   }
 
@@ -28,12 +24,8 @@ export default function MenuScreen() {
       <Text style={styles.bestScore}>
         {t('bestScore')}: {bestScore}
       </Text>
-      <Pressable style={styles.playButton} onPress={handlePlay}>
-        <Text style={styles.playButtonText}>{t('play')}</Text>
-      </Pressable>
-      <Pressable style={styles.linkButton} onPress={handleHowToPlay}>
-        <Text style={styles.linkButtonText}>{t('howToPlay')}</Text>
-      </Pressable>
+      <BouncyButton label={t('play')} onPress={handlePlay} variant="primary" />
+      <BouncyButton label={t('howToPlay')} onPress={handleHowToPlay} variant="link" />
     </SafeAreaView>
   );
 }
@@ -41,20 +33,11 @@ export default function MenuScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#111',
+    backgroundColor: THEME.background,
     alignItems: 'center',
     justifyContent: 'center',
     gap: 24,
   },
-  title: { fontSize: 40, fontWeight: '800', color: '#fff' },
-  bestScore: { fontSize: 18, color: '#ccc' },
-  playButton: {
-    backgroundColor: '#43A047',
-    paddingVertical: 16,
-    paddingHorizontal: 48,
-    borderRadius: 999,
-  },
-  playButtonText: { fontSize: 20, fontWeight: '700', color: '#fff' },
-  linkButton: { paddingVertical: 8 },
-  linkButtonText: { fontSize: 14, color: '#888' },
+  title: { fontSize: 44, fontWeight: '900', color: THEME.text, letterSpacing: 0.5 },
+  bestScore: { fontSize: 18, color: THEME.textMuted, fontWeight: '600' },
 });
