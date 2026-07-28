@@ -67,11 +67,7 @@ const styles = StyleSheet.create({
     borderColor: THEME.border,
     paddingVertical: 16,
     paddingHorizontal: 48,
-    shadowColor: THEME.border,
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
+    boxShadow: `4px 4px 0px ${THEME.border}`,
   },
   secondary: {
     paddingVertical: 10,

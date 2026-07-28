@@ -19,7 +19,7 @@ export function ColorButton({ colorId, label, onPress, entranceKey = 0, entrance
 
   useEffect(() => {
     scale.value = 0;
-    scale.value = withDelay(entranceDelay, withSpring(1, { damping: 10, stiffness: 180 }));
+    scale.value = withDelay(entranceDelay, withSpring(1, { damping: 10, stiffness: 180, overshootClamping: true }));
   }, [entranceKey, entranceDelay, scale]);
 
   const animatedStyle = useAnimatedStyle(() => ({
@@ -54,10 +54,6 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 3,
     borderColor: THEME.border,
-    shadowColor: THEME.border,
-    shadowOffset: { width: 4, height: 4 },
-    shadowOpacity: 1,
-    shadowRadius: 0,
-    elevation: 4,
+    boxShadow: `4px 4px 0px ${THEME.border}`,
   },
 });
