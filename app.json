@@ -39,6 +39,13 @@
         }
       ],
       "expo-font"
-    ]
+    ],
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "ae680c91-0f8c-45bd-aa06-b51cea775ef7"
+      }
+    },
+    "owner": "pfz"
   }
 }
