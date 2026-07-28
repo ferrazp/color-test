@@ -8,12 +8,18 @@ import { playSound } from '../services/sound';
 
 export default function MenuScreen() {
   const { t } = useLanguage();
-  const { bestScore } = useScore();
+  const { bestScore, hasSeenInstructions } = useScore();
 
   function handlePlay() {
     tapFeedback();
     playSound('tap');
-    router.push('/game');
+    router.push(hasSeenInstructions ? '/game' : '/how-to-play');
+  }
+
+  function handleHowToPlay() {
+    tapFeedback();
+    playSound('tap');
+    router.push('/how-to-play');
   }
 
   return (
@@ -24,6 +30,9 @@ export default function MenuScreen() {
       </Text>
       <Pressable style={styles.playButton} onPress={handlePlay}>
         <Text style={styles.playButtonText}>{t('play')}</Text>
+      </Pressable>
+      <Pressable style={styles.linkButton} onPress={handleHowToPlay}>
+        <Text style={styles.linkButtonText}>{t('howToPlay')}</Text>
       </Pressable>
     </SafeAreaView>
   );
@@ -46,4 +55,6 @@ const styles = StyleSheet.create({
     borderRadius: 999,
   },
   playButtonText: { fontSize: 20, fontWeight: '700', color: '#fff' },
+  linkButton: { paddingVertical: 8 },
+  linkButtonText: { fontSize: 14, color: '#888' },
 });
