@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, Text } from 'react-native';
+import { Platform, Pressable, StyleSheet, Text } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { hexFor } from '../lib/colors';
 import { THEME } from '../lib/theme';
@@ -67,7 +67,16 @@ const styles = StyleSheet.create({
     borderColor: THEME.border,
     paddingVertical: 16,
     paddingHorizontal: 48,
-    boxShadow: `4px 4px 0px ${THEME.border}`,
+    ...Platform.select({
+      web: { boxShadow: `4px 4px 0px ${THEME.border}` },
+      default: {
+        shadowColor: THEME.border,
+        shadowOffset: { width: 4, height: 4 },
+        shadowOpacity: 1,
+        shadowRadius: 0,
+        elevation: 4,
+      },
+    }),
   },
   secondary: {
     paddingVertical: 10,

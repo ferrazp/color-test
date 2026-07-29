@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Pressable, StyleSheet } from 'react-native';
+import { Platform, Pressable, StyleSheet } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withDelay, withSpring } from 'react-native-reanimated';
 import { ColorId, hexFor } from '../lib/colors';
 import { THEME } from '../lib/theme';
@@ -54,6 +54,15 @@ const styles = StyleSheet.create({
     marginBottom: 12,
     borderWidth: 3,
     borderColor: THEME.border,
-    boxShadow: `4px 4px 0px ${THEME.border}`,
+    ...Platform.select({
+      web: { boxShadow: `4px 4px 0px ${THEME.border}` },
+      default: {
+        shadowColor: THEME.border,
+        shadowOffset: { width: 4, height: 4 },
+        shadowOpacity: 1,
+        shadowRadius: 0,
+        elevation: 4,
+      },
+    }),
   },
 });
