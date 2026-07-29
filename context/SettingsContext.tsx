@@ -6,12 +6,14 @@ const SOUND_ENABLED_KEY = 'colorTest.soundEnabled';
 type SettingsContextValue = {
   soundEnabled: boolean;
   setSoundEnabled: (value: boolean) => void;
+  settingsLoaded: boolean;
 };
 
 const SettingsContext = createContext<SettingsContextValue | null>(null);
 
 export function SettingsProvider({ children }: { children: ReactNode }) {
   const [soundEnabled, setSoundEnabledState] = useState(true);
+  const [settingsLoaded, setSettingsLoaded] = useState(false);
 
   useEffect(() => {
     (async () => {
@@ -23,6 +25,7 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
       } catch {
         // Keep the default of true if storage is unavailable.
       }
+      setSettingsLoaded(true);
     })();
   }, []);
 
@@ -33,7 +36,10 @@ export function SettingsProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const value = useMemo(() => ({ soundEnabled, setSoundEnabled }), [soundEnabled, setSoundEnabled]);
+  const value = useMemo(
+    () => ({ soundEnabled, setSoundEnabled, settingsLoaded }),
+    [soundEnabled, setSoundEnabled, settingsLoaded]
+  );
 
   return <SettingsContext.Provider value={value}>{children}</SettingsContext.Provider>;
 }
