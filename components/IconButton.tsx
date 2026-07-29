@@ -1,6 +1,7 @@
 import { Platform, Pressable, StyleProp, StyleSheet, Text, ViewStyle } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { THEME } from '../lib/theme';
+import { tapFeedback } from '../services/haptics';
 
 type Props = {
   icon: string;
@@ -26,9 +27,14 @@ export function IconButton({ icon, onPress, accessibilityLabel, style }: Props) 
     scale.value = withSpring(1, { damping: 10, stiffness: 200 });
   }
 
+  function handlePress() {
+    tapFeedback();
+    onPress();
+  }
+
   return (
     <AnimatedPressable
-      onPress={onPress}
+      onPress={handlePress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
       style={[styles.button, style, animatedStyle]}
