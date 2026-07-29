@@ -21,7 +21,10 @@ function getPlayer(name: SoundName): AudioPlayer | null {
   }
 }
 
-export async function playSound(name: SoundName): Promise<void> {
+export async function playSound(name: SoundName, soundEnabled: boolean): Promise<void> {
+  if (!soundEnabled) {
+    return;
+  }
   try {
     const player = getPlayer(name);
     if (!player) {

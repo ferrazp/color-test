@@ -7,6 +7,7 @@ import { ColorButton } from '../components/ColorButton';
 import { ScoreBadge } from '../components/ScoreBadge';
 import { TimerBar } from '../components/TimerBar';
 import { useLanguage } from '../context/LanguageContext';
+import { useSettings } from '../context/SettingsContext';
 import { useScore } from '../context/ScoreContext';
 import { ColorId, hexFor } from '../lib/colors';
 import { generateRound } from '../lib/generateRound';
@@ -22,6 +23,7 @@ const RESULT_TRANSITION_DELAY_MS = 450;
 
 export default function GameScreen() {
   const { t, colorName } = useLanguage();
+  const { soundEnabled } = useSettings();
   const { score, adsRemoved, addPoints, resetSession, endSession } = useScore();
   const [round, setRound] = useState(() => generateRound());
   const [correctCount, setCorrectCount] = useState(0);
@@ -95,7 +97,7 @@ export default function GameScreen() {
       const nextCorrectCount = correctCount + 1;
       addPoints(POINTS_PER_CORRECT);
       successFeedback();
-      playSound('correct');
+      playSound('correct', soundEnabled);
       setFlashColor(hexFor(round.ink));
       flashOpacity.value = withSequence(withTiming(0.25, { duration: 60 }), withTiming(0, { duration: 250 }));
       setCorrectCount(nextCorrectCount);
@@ -103,7 +105,7 @@ export default function GameScreen() {
       setRemainingMs(roundDurationFor(nextCorrectCount));
     } else {
       errorFeedback();
-      playSound('wrong');
+      playSound('wrong', soundEnabled);
       finishGame();
     }
   }

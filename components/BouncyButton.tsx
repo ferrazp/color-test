@@ -2,6 +2,7 @@ import { Platform, Pressable, StyleSheet, Text } from 'react-native';
 import Animated, { useAnimatedStyle, useSharedValue, withSpring } from 'react-native-reanimated';
 import { hexFor } from '../lib/colors';
 import { THEME } from '../lib/theme';
+import { useSettings } from '../context/SettingsContext';
 import { tapFeedback } from '../services/haptics';
 import { playSound } from '../services/sound';
 
@@ -23,6 +24,8 @@ export function BouncyButton({ label, onPress, variant = 'primary', disabled = f
     transform: [{ scale: scale.value }],
   }));
 
+  const { soundEnabled } = useSettings();
+
   function handlePressIn() {
     scale.value = withSpring(0.92, { damping: 12, stiffness: 300 });
   }
@@ -33,7 +36,7 @@ export function BouncyButton({ label, onPress, variant = 'primary', disabled = f
 
   function handlePress() {
     tapFeedback();
-    playSound('tap');
+    playSound('tap', soundEnabled);
     onPress();
   }
 
