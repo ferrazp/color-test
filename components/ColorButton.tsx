@@ -12,8 +12,6 @@ type Props = {
   entranceDelay?: number;
 };
 
-const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
-
 export function ColorButton({ colorId, label, onPress, entranceKey = 0, entranceDelay = 0 }: Props) {
   const scale = useSharedValue(0);
 
@@ -35,23 +33,28 @@ export function ColorButton({ colorId, label, onPress, entranceKey = 0, entrance
   }
 
   return (
-    <AnimatedPressable
+    <Pressable
       onPress={onPress}
       onPressIn={handlePressIn}
       onPressOut={handlePressOut}
-      style={[styles.button, { backgroundColor: hexFor(colorId) }, animatedStyle]}
+      style={styles.wrapper}
       accessibilityRole="button"
       accessibilityLabel={label}
-    />
+    >
+      <Animated.View style={[styles.button, { backgroundColor: hexFor(colorId) }, animatedStyle]} />
+    </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
-  button: {
+  wrapper: {
     width: '47%',
     aspectRatio: 2,
-    borderRadius: 20,
     marginBottom: 12,
+  },
+  button: {
+    flex: 1,
+    borderRadius: 20,
     borderWidth: 3,
     borderColor: THEME.border,
     ...Platform.select({

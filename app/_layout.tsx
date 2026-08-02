@@ -26,7 +26,7 @@ function MusicController() {
 export default function RootLayout() {
   useEffect(() => {
     setAudioModeAsync({
-      playsInSilentMode: false,
+      playsInSilentMode: true,
       interruptionMode: 'mixWithOthers',
       shouldPlayInBackground: false,
     }).catch(() => {
