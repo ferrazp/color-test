@@ -1,17 +1,62 @@
-// TODO: replace with react-native-google-mobile-ads once real Ad Unit IDs exist.
-// NOTE: sessions can now end in a few seconds (per-round timer), so a real
-// SDK integration must apply its own frequency cap — do not fire on every
-// call without one, or repeated fast losses will violate ad network policy.
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { AdEventType, AdsConsent, InterstitialAd, MobileAds } from 'react-native-google-mobile-ads';
+import { shouldShowInterstitial } from '../lib/adFrequency';
+import { INTERSTITIAL_AD_UNIT_ID } from '../lib/adUnits';
+
+const GAME_OVER_COUNT_KEY = 'colorTest.gameOverCount';
+
+let preloadedInterstitial: InterstitialAd | null = null;
+
+function preloadInterstitial(): void {
+  const interstitial = InterstitialAd.createForAdRequest(INTERSTITIAL_AD_UNIT_ID);
+  interstitial.addAdEventListener(AdEventType.CLOSED, () => {
+    preloadedInterstitial = null;
+    preloadInterstitial();
+  });
+  interstitial.load();
+  preloadedInterstitial = interstitial;
+}
+
+export async function initAds(): Promise<void> {
+  try {
+    const consentInfo = await AdsConsent.gatherConsent();
+    if (!consentInfo.canRequestAds) {
+      return;
+    }
+    await MobileAds().initialize();
+    preloadInterstitial();
+  } catch {
+    // Ads must never block gameplay.
+  }
+}
+
+async function nextGameOverCount(): Promise<number> {
+  try {
+    const stored = await AsyncStorage.getItem(GAME_OVER_COUNT_KEY);
+    const next = (Number(stored) || 0) + 1;
+    await AsyncStorage.setItem(GAME_OVER_COUNT_KEY, String(next));
+    return next;
+  } catch {
+    return 1;
+  }
+}
+
 export function showInterstitial(adsRemoved: boolean): void {
   if (adsRemoved) {
     return;
   }
-  console.log('[ads mock] would show an interstitial ad now');
-}
-
-export function logBannerImpression(adsRemoved: boolean): void {
-  if (adsRemoved) {
-    return;
-  }
-  console.log('[ads mock] banner impression');
+  nextGameOverCount()
+    .then((count) => {
+      if (!shouldShowInterstitial(count)) {
+        return;
+      }
+      if (preloadedInterstitial?.loaded) {
+        preloadedInterstitial.show().catch(() => {
+          // Ads must never block gameplay.
+        });
+      }
+    })
+    .catch(() => {
+      // Ads must never block gameplay.
+    });
 }
