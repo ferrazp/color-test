@@ -13,6 +13,10 @@ function preloadInterstitial(): void {
     preloadedInterstitial = null;
     preloadInterstitial();
   });
+  interstitial.addAdEventListener(AdEventType.ERROR, () => {
+    preloadedInterstitial = null;
+    preloadInterstitial();
+  });
   interstitial.load();
   preloadedInterstitial = interstitial;
 }
