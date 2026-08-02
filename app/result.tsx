@@ -8,12 +8,13 @@ import { useLanguage } from '../context/LanguageContext';
 import { useScore } from '../context/ScoreContext';
 import { hexFor } from '../lib/colors';
 import { THEME } from '../lib/theme';
-import { purchaseRemoveAds } from '../services/iap';
+import { purchaseRemoveAds, restorePurchases } from '../services/iap';
 
 export default function ResultScreen() {
   const { t } = useLanguage();
   const { score, adsRemoved, wasNewBest, setAdsRemoved } = useScore();
   const [purchasing, setPurchasing] = useState(false);
+  const [restoring, setRestoring] = useState(false);
 
   function handlePlayAgain() {
     router.replace('/game');
@@ -35,6 +36,18 @@ export default function ResultScreen() {
     }
   }
 
+  async function handleRestorePurchases() {
+    setRestoring(true);
+    try {
+      const owned = await restorePurchases();
+      if (owned) {
+        setAdsRemoved(true);
+      }
+    } finally {
+      setRestoring(false);
+    }
+  }
+
   return (
     <SafeAreaView style={styles.container}>
       <Text style={styles.score}>
@@ -50,6 +63,14 @@ export default function ResultScreen() {
           onPress={handleRemoveAds}
           variant="link"
           disabled={purchasing}
+        />
+      )}
+      {!adsRemoved && (
+        <BouncyButton
+          label={restoring ? t('purchasing') : t('restorePurchases')}
+          onPress={handleRestorePurchases}
+          variant="link"
+          disabled={restoring}
         />
       )}
     </SafeAreaView>
