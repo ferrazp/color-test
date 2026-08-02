@@ -1,41 +1,25 @@
-import { useEffect } from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, View } from 'react-native';
+import { BannerAd, BannerAdSize } from 'react-native-google-mobile-ads';
 import { useScore } from '../context/ScoreContext';
-import { THEME } from '../lib/theme';
-import { logBannerImpression } from '../services/ads';
+import { BANNER_AD_UNIT_ID } from '../lib/adUnits';
 
 export function AdBanner() {
   const { adsRemoved } = useScore();
-
-  useEffect(() => {
-    logBannerImpression(adsRemoved);
-  }, [adsRemoved]);
 
   if (adsRemoved) {
     return null;
   }
 
   return (
-    <View style={styles.banner}>
-      <Text style={styles.text}>Ad banner (mock)</Text>
+    <View style={styles.container}>
+      <BannerAd unitId={BANNER_AD_UNIT_ID} size={BannerAdSize.LARGE_ANCHORED_ADAPTIVE_BANNER} />
     </View>
   );
 }
 
 const styles = StyleSheet.create({
-  banner: {
-    height: 50,
+  container: {
     width: '100%',
-    borderRadius: 16,
-    backgroundColor: '#fff',
-    borderWidth: 3,
-    borderColor: THEME.border,
     alignItems: 'center',
-    justifyContent: 'center',
-  },
-  text: {
-    color: THEME.textMuted,
-    fontSize: 12,
-    fontWeight: '700',
   },
 });
