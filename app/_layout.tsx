@@ -5,6 +5,8 @@ import { LanguageProvider } from '../context/LanguageContext';
 import { ScoreProvider } from '../context/ScoreContext';
 import { SettingsProvider, useSettings } from '../context/SettingsContext';
 import { startMusic, stopMusic } from '../services/music';
+import { initAds } from '../services/ads';
+import { initIapConnection } from '../services/iap';
 
 function MusicController() {
   const { soundEnabled, settingsLoaded } = useSettings();
@@ -32,6 +34,11 @@ export default function RootLayout() {
     }).catch(() => {
       // Audio mode is a nice-to-have; failure to set it must not block the app.
     });
+  }, []);
+
+  useEffect(() => {
+    initAds();
+    initIapConnection();
   }, []);
 
   return (
