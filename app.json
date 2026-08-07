@@ -53,7 +53,8 @@
             "kotlinVersion": "2.3.21"
           }
         }
-      ]
+      ],
+      ["./plugins/withKotlinVersion", "2.3.21"]
     ],
     "extra": {
       "router": {},
